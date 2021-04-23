@@ -42,14 +42,31 @@ async fn main() {
         });
 
     // GET / -> index html
-    let html = fs::read_to_string("src/index.html");
-    let html = match html {
+    let html = fs::read_to_string("src/index_before_svg.html");
+    let mut html = match html {
         Ok(html) => html,
         Err(e) => {
             eprintln!("couldn't read HTML");
             String::new()
         }
     };
+
+    // 1 = r1, 2 = r2, 3 = r3
+    // 4 = y1, 5 = y2, 6 = y3
+    // 7 = b1, 8 = b2, 9 = b3
+    let order: [i32; 9] = [9, 7, 8, 1, 2, 3, 5, 6, 4];
+
+    let html2 = fs::read_to_string("src/index_after_svg.html");
+    let html2 = match html2 {
+        Ok(html) => html,
+        Err(e) => {
+            eprintln!("couldn't read HTML");
+            String::new()
+        }
+    };
+
+    html.push_str(&html2);
+
     let index = warp::path::end().map(move || warp::reply::html(html.clone()));
 
     let routes = index.or(chat);
