@@ -1,6 +1,8 @@
 // #![deny(warnings)]
 use std::fs;
 use std::collections::HashMap;
+use rand::seq::SliceRandom;
+use rand::thread_rng;
 use std::sync::{
     atomic::{AtomicUsize, Ordering},
     Arc,
@@ -76,7 +78,9 @@ async fn main() {
     // 1 = r1, 2 = r2, 3 = r3
     // 4 = y1, 5 = y2, 6 = y3
     // 7 = b1, 8 = b2, 9 = b3
-    let order: [usize; 9] = [9, 2, 4, 1, 7, 3, 5, 8, 6];
+    let mut order: [usize; 9] = [9, 2, 4, 1, 7, 3, 5, 8, 6];
+    let mut rng = thread_rng();
+    order.shuffle(&mut rng);
 
     let mut count = 0usize;
     for y in 0..=2 {
