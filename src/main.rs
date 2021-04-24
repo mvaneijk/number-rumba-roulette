@@ -1,8 +1,6 @@
 // #![deny(warnings)]
-use std::fs;
+
 use std::collections::HashMap;
-use rand::seq::SliceRandom;
-use rand::thread_rng;
 use std::sync::{
     atomic::{AtomicUsize, Ordering},
     Arc,
@@ -13,6 +11,9 @@ use tokio::sync::{mpsc, RwLock};
 use tokio_stream::wrappers::UnboundedReceiverStream;
 use warp::ws::{Message, WebSocket};
 use warp::Filter;
+
+mod rumba;
+use rumba::create_random_rumba;
 
 /// Our global unique user id counter.
 static NEXT_USER_ID: AtomicUsize = AtomicUsize::new(1);
@@ -44,79 +45,12 @@ async fn main() {
         });
 
     // GET / -> index html
-    let html = fs::read_to_string("src/index_before_svg.html");
-    let mut html = match html {
-        Ok(html) => html,
-        Err(e) => {
-            eprintln!("couldn't read HTML");
-            String::new()
-        }
-    };
 
-    // coordinates for blocks on the first row
-    static x_rows: [i32; 3] = [50, 210, 370];
-    static y_cols: [i32; 3] = [20, 120, 220];
-
-    // coordinates for numbers on 1st, 2nd or 3rd column
-    static one_x_coord: [i32; 3] = [105, 265, 425];
-    static two_x_coord: [i32; 3] = [94, 254, 414];
-    static three_x_coord: [i32; 3] = [93, 256, 413];
-    static num_y_coord: [i32; 3] = [110, 210, 310];
-
-    static colors: [&str; 9] = [
-        "#ff0062",
-        "#ff0062",
-        "#ff0062",
-        "#ffd000",
-        "#ffd000",
-        "#ffd000",
-        "#0099ff",
-        "#0099ff",
-        "#0099ff"
-    ];
-
-    // 1 = r1, 2 = r2, 3 = r3
-    // 4 = y1, 5 = y2, 6 = y3
-    // 7 = b1, 8 = b2, 9 = b3
-    let mut order: [usize; 9] = [9, 2, 4, 1, 7, 3, 5, 8, 6];
-    let mut rng = thread_rng();
-    order.shuffle(&mut rng);
-
-    let mut count = 0usize;
-    for y in 0..=2 {
-        for x in 0..=2 {
-            let num = if order[count] % 3 != 0 { order[count] % 3 } else { 3 };
-            let x_coord: i32;
-            match num {
-                1 => {x_coord = one_x_coord[x]}
-                2 => {x_coord = two_x_coord[x]}
-                3 => {x_coord = three_x_coord[x]}
-                _ => {x_coord = 0; eprintln!("Error converting x_coord.")}
-            }
-
-            let add_html = format!("<rect x=\"{}\" y=\"{}\" rx=\"10\" ry=\"10\" width=\"150\" height=\"100\"
-            style=\"fill:{};stroke:black;stroke-width:5;opacity:1\" />
-            <text fill=\"black\" font-size=\"110\" font-family=\"Poppins\" x=\"{}\" y=\"{}\">{}</text>",
-             x_rows[x], y_cols[y], colors[order[count]-1],
-            x_coord, num_y_coord[y], num);
-
-            html.push_str(&add_html.clone());
-            count += 1;
-        }
-    }
-
-    let html2 = fs::read_to_string("src/index_after_svg.html");
-    let html2 = match html2 {
-        Ok(html) => html,
-        Err(e) => {
-            eprintln!("couldn't read HTML");
-            String::new()
-        }
-    };
-
-    html.push_str(&html2);
-
-    let index = warp::path::end().map(move || warp::reply::html(html.clone()));
+    let index = warp::path::end()
+        .map(move || {
+            let html = create_random_rumba();
+            warp::reply::html(html)
+        });
 
     let routes = index.or(chat);
 
