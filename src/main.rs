@@ -111,16 +111,17 @@ async fn user_message(my_id: usize, msg: Message, users: &Users) {
         return;
     };
 
-    let new_msg = format!("<User#{}>: {}", my_id, msg);
+    let new_msg = create_random_rumba();
 
-    // New message from this user, send it to everyone else (except same uid)...
+    // New message from this user, send it to everyone including local user ...
     for (&uid, tx) in users.read().await.iter() {
-        if my_id != uid {
-            if let Err(_disconnected) = tx.send(Ok(Message::text(create_random_rumba()))) {
+        if let Err(_disconnected) = tx.send(Ok(Message::text(new_msg.clone()))) {
                 // The tx is disconnected, our `user_disconnected` code
                 // should be happening in another task, nothing more to
                 // do here.
             }
+        if my_id != uid {
+            
         }
     }
 }

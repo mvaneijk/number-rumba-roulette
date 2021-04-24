@@ -36,15 +36,13 @@
             </svg>
         </div>
 
-        <h1>Warp chat</h1>
-        <div id="chat">
-            <p><em>Connecting..</em></p>
+        <h1>Number Rumba</h1>
+        <div id="status">
+            <p><em>Connecting...</em></p>
         </div>
-        <input type="text" id="text" />
-        <button type="button" id="send">Send</button>
+        <button type="button" id="send">Husselen!</button>
         <script type="text/javascript">
-        const chat = document.getElementById('chat');
-        const text = document.getElementById('text');
+        const chat = document.getElementById('status');
         const rumba = document.getElementById('rumba');
         const uri = 'ws://' + location.host + '/chat';
         const ws = new WebSocket(uri);
@@ -56,7 +54,7 @@
         }
 
         ws.onopen = function() {
-            chat.innerHTML = '<p><em>Connected!</em></p>';
+            status.innerHTML = '<p><em>Connected!</em></p>';
         };
 
         ws.onmessage = function(msg) {
@@ -64,15 +62,11 @@
         };
 
         ws.onclose = function() {
-            chat.getElementsByTagName('em')[0].innerText = 'Disconnected!';
+            status.getElementsByTagName('em')[0].innerText = 'Disconnected!';
         };
 
         send.onclick = function() {
-            const msg = text.value;
-            ws.send(msg);
-            text.value = '';
-
-            message('<You>: ' + msg);
+            ws.send("shuffle");
         };
         </script>
     </body>
