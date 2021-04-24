@@ -51,24 +51,53 @@ async fn main() {
         }
     };
 
+    // coordinates for blocks on the first row
+    static x_rows: [i32; 3] = [50, 210, 370];
+    static y_cols: [i32; 3] = [20, 120, 220];
+
+    // coordinates for numbers on 1st, 2nd or 3rd column
+    static one_x_coord: [i32; 3] = [105, 265, 425];
+    static two_x_coord: [i32; 3] = [94, 254, 414];
+    static three_x_coord: [i32; 3] = [93, 256, 413];
+    static num_y_coord: [i32; 3] = [110, 210, 310];
+
+    static colors: [&str; 9] = [
+        "#ff0062",
+        "#ff0062",
+        "#ff0062",
+        "#ffd000",
+        "#ffd000",
+        "#ffd000",
+        "#0099ff",
+        "#0099ff",
+        "#0099ff"
+    ];
+
     // 1 = r1, 2 = r2, 3 = r3
     // 4 = y1, 5 = y2, 6 = y3
     // 7 = b1, 8 = b2, 9 = b3
-    let order: [i32; 9] = [9, 7, 8, 1, 2, 3, 5, 6, 4];
+    let order: [usize; 9] = [9, 2, 4, 1, 7, 3, 5, 8, 6];
 
-    let mut count = 0i32;
-    for y in 1..=3 {
-        for x in 1..=3 {
-            count += 1;
-            let num = if order[count as i32] % 3 != 0 { order[count] %3 } else { 1 };
+    let mut count = 0usize;
+    for y in 0..=2 {
+        for x in 0..=2 {
+            let num = if order[count] % 3 != 0 { order[count] % 3 } else { 3 };
+            let x_coord: i32;
+            match num {
+                1 => {x_coord = one_x_coord[x]}
+                2 => {x_coord = two_x_coord[x]}
+                3 => {x_coord = three_x_coord[x]}
+                _ => {x_coord = 0; eprintln!("Error converting x_coord.")}
+            }
 
             let add_html = format!("<rect x=\"{}\" y=\"{}\" rx=\"10\" ry=\"10\" width=\"150\" height=\"100\"
             style=\"fill:{};stroke:black;stroke-width:5;opacity:1\" />
             <text fill=\"black\" font-size=\"110\" font-family=\"Poppins\" x=\"{}\" y=\"{}\">{}</text>",
-             x_rows[x], y_cols[y], colors[order[count]],
-            one_x_coord[order[count]], num_y_coord[order[count]], num);
+             x_rows[x], y_cols[y], colors[order[count]-1],
+            x_coord, num_y_coord[y], num);
 
             html.push_str(&add_html.clone());
+            count += 1;
         }
     }
 
@@ -169,25 +198,7 @@ static RED: &str = "#ff0062";
 static YELLOW: &str = "#ffd000";
 static BLUE: &str = "#0099ff";
 
-static colors: [&str; 9] = [
-    "#ff0062",
-    "#ff0062",
-    "#ff0062",
-    "#ffd000",
-    "#ffd000",
-    "#ffd000",
-    "#0099ff",
-    "#0099ff",
-    "#0099ff"
-];
 
 
-// coordinates for blocks on the first row
-static x_rows: [i32; 3] = [50, 210, 370];
-static y_cols: [i32; 3] = [20, 120, 220];
 
-// coordinates for numbers on 1st, 2nd or 3rd column
-static one_x_coord: [i32; 9] = [105, 265, 425, 105, 265, 425, 105, 265, 425];
-static two_x_coord: [i32; 9] = [94, 254, 414, 94, 254, 414, 94, 254, 414];
-static three_x_coord: [i32; 9] = [93, 256, 413, 93, 256, 413, 93, 256, 413];
-static num_y_coord: [i32; 9] = [110, 210, 310, 110, 210, 310, 110, 210, 310];
+
