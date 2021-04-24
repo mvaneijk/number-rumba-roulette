@@ -33,6 +33,8 @@ pub fn create_random_rumba() -> String {
 
     let mut count = 0usize;
     let mut rumba_html = String::new();
+    rumba_html.push_str(BASE_RUMBA_START);
+
     for y in 0..=2 {
         for x in 0..=2 {
             let num = if order[count] % 3 != 0 { order[count] % 3 } else { 3 };
@@ -55,5 +57,29 @@ pub fn create_random_rumba() -> String {
         }
     }
 
+    rumba_html.push_str(BASE_RUMBA_END);
     rumba_html
 }
+
+static BASE_RUMBA_START: &str = r#"
+
+    <svg width="700" height="350">
+        <!-- four black pillars -->
+        <rect x="100" y="0" rx="20" ry="20" width="50" height="340"
+        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
+        <rect x="260" y="0" rx="20" ry="20" width="50" height="340"
+        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
+        <rect x="420" y="0" rx="20" ry="20" width="50" height="340"
+        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
+        <rect x="580" y="0" rx="20" ry="20" width="50" height="340"
+        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
+        <!-- bottom black bar -->
+        <rect x="30" y="325" rx="0" ry="0" width="650" height="20"
+        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
+"#;
+
+static BASE_RUMBA_END: &str = r#"
+        Sorry, your browser does not support inline SVG.
+    </svg>
+
+"#;
