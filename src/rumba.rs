@@ -1,17 +1,7 @@
-use std::fs;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
 pub fn create_random_rumba() -> String {
-    let html = fs::read_to_string("src/index_before_svg.html");
-    let mut html = match html {
-        Ok(html) => html,
-        Err(e) => {
-            eprintln!("couldn't read HTML");
-            String::new()
-        }
-    };
-
     // coordinates for blocks on the first row
     static x_rows: [i32; 3] = [50, 210, 370];
     static y_cols: [i32; 3] = [20, 120, 220];
@@ -42,6 +32,7 @@ pub fn create_random_rumba() -> String {
     order.shuffle(&mut rng);
 
     let mut count = 0usize;
+    let mut rumba_html = String::new();
     for y in 0..=2 {
         for x in 0..=2 {
             let num = if order[count] % 3 != 0 { order[count] % 3 } else { 3 };
@@ -59,20 +50,10 @@ pub fn create_random_rumba() -> String {
              x_rows[x], y_cols[y], colors[order[count]-1],
             x_coord, num_y_coord[y], num);
 
-            html.push_str(&add_html.clone());
+            rumba_html.push_str(&add_html.clone());
             count += 1;
         }
     }
 
-    let html2 = fs::read_to_string("src/index_after_svg.html");
-    let html2 = match html2 {
-        Ok(html) => html,
-        Err(e) => {
-            eprintln!("couldn't read HTML");
-            String::new()
-        }
-    };
-
-    html.push_str(&html2);
-    html.to_owned()
+    rumba_html
 }

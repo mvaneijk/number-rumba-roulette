@@ -1,5 +1,5 @@
 // #![deny(warnings)]
-
+use std::fs;
 use std::collections::HashMap;
 use std::sync::{
     atomic::{AtomicUsize, Ordering},
@@ -48,7 +48,7 @@ async fn main() {
 
     let index = warp::path::end()
         .map(move || {
-            let html = create_random_rumba();
+            let html = load_html();
             warp::reply::html(html)
         });
 
@@ -116,7 +116,7 @@ async fn user_message(my_id: usize, msg: Message, users: &Users) {
     // New message from this user, send it to everyone else (except same uid)...
     for (&uid, tx) in users.read().await.iter() {
         if my_id != uid {
-            if let Err(_disconnected) = tx.send(Ok(Message::text(new_msg.clone()))) {
+            if let Err(_disconnected) = tx.send(Ok(Message::text(create_random_rumba()))) {
                 // The tx is disconnected, our `user_disconnected` code
                 // should be happening in another task, nothing more to
                 // do here.
@@ -130,6 +130,19 @@ async fn user_disconnected(my_id: usize, users: &Users) {
 
     // Stream closed up, so remove from the user list
     users.write().await.remove(&my_id);
+}
+
+fn load_html() -> String {
+    let html = fs::read_to_string("src/index.html");
+    let mut html = match html {
+        Ok(html) => html,
+        Err(e) => {
+            eprintln!("couldn't read HTML");
+            String::new()
+        }
+    };
+
+    html
 }
 
 static RED: &str = "#ff0062";
