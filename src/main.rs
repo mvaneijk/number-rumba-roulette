@@ -11,6 +11,7 @@ use tokio::sync::{mpsc, RwLock};
 use tokio_stream::wrappers::UnboundedReceiverStream;
 use warp::ws::{Message, WebSocket};
 use warp::Filter;
+use json::{object};
 
 mod rumba;
 use rumba::create_random_rumba;
@@ -106,11 +107,14 @@ async fn user_connected(ws: WebSocket, users: Users) {
 }
 
 async fn user_message(my_id: usize, users: &Users) {
-    let new_msg = create_random_rumba();
+    let msg = object!{
+        "id"    => my_id.to_string(),
+        "rumba" => create_random_rumba()
+    };
 
     // New message from this user, send it to everyone including local user ...
     for (&uid, tx) in users.read().await.iter() {
-        if let Err(_disconnected) = tx.send(Ok(Message::text(new_msg.clone()))) {
+        if let Err(_disconnected) = tx.send(Ok(Message::text(msg.dump()))) {
                 // The tx is disconnected, our `user_disconnected` code
                 // should be happening in another task, nothing more to
                 // do here.
