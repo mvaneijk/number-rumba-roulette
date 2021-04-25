@@ -71,6 +71,8 @@ async fn user_connected(ws: WebSocket, users: Users) {
     let (tx, rx) = mpsc::unbounded_channel();
     let rx = UnboundedReceiverStream::new(rx);
     tokio::task::spawn(rx.forward(user_ws_tx).map(|result| {
+        // do stuff when a message is received
+
         if let Err(e) = result {
             eprintln!("websocket send error: {}", e);
         }
@@ -128,13 +130,11 @@ async fn user_disconnected(my_id: usize, users: &Users) {
 
 fn load_html() -> String {
     let html = fs::read_to_string("src/index.html");
-    let html = match html {
+    match html {
         Ok(html) => html,
         Err(_) => {
             eprintln!("couldn't read HTML");
             String::new()
         }
-    };
-
-    html
+    }
 }
