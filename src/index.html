@@ -49,12 +49,15 @@
         </div>
         <button type="button" id="send">Husselen!</button>
 
+        <textarea id="console" rows="10" cols="100" readonly></textarea>
+
         <script type="text/javascript">
         const chat = document.getElementById('status');
         const rumba = document.getElementById('rumba');
         const rumba_blocks = document.getElementsByClassName('block');
         const uri = 'ws://' + location.host + '/chat';
         const ws = new WebSocket(uri);
+        document.getElementById("console").innerHTML = new Date().toLocaleString();
 
         function message(data) {
             for (var i = 0; i < rumba_blocks.length; i++) {
