@@ -88,14 +88,14 @@ async fn user_connected(ws: WebSocket, users: Users) {
     // Every time the user sends a message, broadcast it to
     // all other users...
     while let Some(result) = user_ws_rx.next().await {
-        let msg = match result {
-            Ok(msg) => msg,
+        match result {
+            Ok(_) => (),
             Err(e) => {
                 eprintln!("websocket error(uid={}): {}", my_id, e);
                 break;
             }
         };
-        user_message(my_id, msg, &users).await;
+        user_message(my_id, &users).await;
     }
 
     // user_ws_rx stream will keep processing as long as the user stays
@@ -103,14 +103,7 @@ async fn user_connected(ws: WebSocket, users: Users) {
     user_disconnected(my_id, &users2).await;
 }
 
-async fn user_message(my_id: usize, msg: Message, users: &Users) {
-    // Skip any non-Text messages...
-    let msg = if let Ok(s) = msg.to_str() {
-        s
-    } else {
-        return;
-    };
-
+async fn user_message(my_id: usize, users: &Users) {
     let new_msg = create_random_rumba();
 
     // New message from this user, send it to everyone including local user ...
@@ -135,9 +128,9 @@ async fn user_disconnected(my_id: usize, users: &Users) {
 
 fn load_html() -> String {
     let html = fs::read_to_string("src/index.html");
-    let mut html = match html {
+    let html = match html {
         Ok(html) => html,
-        Err(e) => {
+        Err(_) => {
             eprintln!("couldn't read HTML");
             String::new()
         }
@@ -145,12 +138,3 @@ fn load_html() -> String {
 
     html
 }
-
-static RED: &str = "#ff0062";
-static YELLOW: &str = "#ffd000";
-static BLUE: &str = "#0099ff";
-
-
-
-
-

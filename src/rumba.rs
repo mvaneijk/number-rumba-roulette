@@ -12,16 +12,14 @@ pub fn create_random_rumba() -> String {
     static THREE_X_COORD: [i32; 3] = [92, 255, 412];
     static NUM_Y_COORD: [i32; 3] = [110, 210, 310];
 
+    static RED: &str = "#ff0062";
+    static YELLOW: &str = "#ffd000";
+    static BLUE: &str = "#0099ff";
+
     static COLORS: [&str; 9] = [
-        "#ff0062",
-        "#ff0062",
-        "#ff0062",
-        "#ffd000",
-        "#ffd000",
-        "#ffd000",
-        "#0099ff",
-        "#0099ff",
-        "#0099ff"
+        RED, RED, RED,
+        YELLOW, YELLOW, YELLOW,
+        BLUE, BLUE, BLUE
     ];
 
     // 1 = r1, 2 = r2, 3 = r3
