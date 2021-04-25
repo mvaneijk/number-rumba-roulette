@@ -49,7 +49,7 @@
         </div>
         <button type="button" id="send">Husselen!</button>
 
-        <textarea id="console" rows="10" cols="100" readonly></textarea>
+        <textarea id="page_console" rows="10" cols="100" readonly></textarea>
 
         <script type="text/javascript">
         const chat = document.getElementById('status');
@@ -57,7 +57,9 @@
         const rumba_blocks = document.getElementsByClassName('block');
         const uri = 'ws://' + location.host + '/chat';
         const ws = new WebSocket(uri);
-        document.getElementById("console").innerHTML = new Date().toLocaleString();
+        const page_console = document.getElementById("page_console");
+        page_console.innerHTML = new Date().toLocaleString();
+        page_console.innerHTML = new Date().toLocaleString();
 
         function message(data) {
             for (var i = 0; i < rumba_blocks.length; i++) {
@@ -67,15 +69,19 @@
         }
 
         ws.onopen = function() {
-            status.innerHTML = '<p><em>Connected!</em></p>';
+            page_console.innerHTML += '\nConnected!';
         };
+
+        ws.onerror = function(msg) {
+            page_console.innerHTML += msg.data;
+        }
 
         ws.onmessage = function(msg) {
             message(msg.data);
         };
 
         ws.onclose = function() {
-            status.getElementsByTagName('em')[0].innerText = 'Disconnected!';
+            page_console.innerHTML += '\nDisconnected!';
         };
 
         send.onclick = function() {
