@@ -31,7 +31,6 @@ pub fn create_random_rumba() -> String {
 
     let mut count = 0usize;
     let mut rumba_html = String::new();
-    rumba_html.push_str(BASE_RUMBA_START);
 
     for y in 0..=2 {
         for x in 0..=2 {
@@ -44,9 +43,9 @@ pub fn create_random_rumba() -> String {
                 _ => {x_coord = 0; eprintln!("Error converting x_coord.")}
             }
 
-            let add_html = format!("<rect x=\"{}\" y=\"{}\" rx=\"10\" ry=\"10\" width=\"150\" height=\"100\"
+            let add_html = format!("<rect class=\"block\" x=\"{}\" y=\"{}\" rx=\"10\" ry=\"10\" width=\"150\" height=\"100\"
             style=\"fill:{};stroke:black;stroke-width:5;opacity:1\" />
-            <text fill=\"black\" font-size=\"110\" font-family=\"Poppins\" x=\"{}\" y=\"{}\">{}</text>",
+            <text class=\"block\" fill=\"black\" font-size=\"110\" font-family=\"Poppins\" x=\"{}\" y=\"{}\">{}</text>",
              X_ROWS[x], Y_COLS[y], COLORS[order[count]-1],
             x_coord, NUM_Y_COORD[y], num);
 
@@ -55,29 +54,5 @@ pub fn create_random_rumba() -> String {
         }
     }
 
-    rumba_html.push_str(BASE_RUMBA_END);
     rumba_html
 }
-
-static BASE_RUMBA_START: &str = r#"
-
-    <svg width="700" height="350">
-        <!-- four black pillars -->
-        <rect x="100" y="0" rx="20" ry="20" width="50" height="340"
-        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
-        <rect x="260" y="0" rx="20" ry="20" width="50" height="340"
-        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
-        <rect x="420" y="0" rx="20" ry="20" width="50" height="340"
-        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
-        <rect x="580" y="0" rx="20" ry="20" width="50" height="340"
-        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
-        <!-- bottom black bar -->
-        <rect x="30" y="325" rx="0" ry="0" width="650" height="20"
-        style="fill:black;stroke:black;stroke-width:5;opacity:1" />
-"#;
-
-static BASE_RUMBA_END: &str = r#"
-        Sorry, your browser does not support inline SVG.
-    </svg>
-
-"#;

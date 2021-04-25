@@ -4,7 +4,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
 <html>
     <head>
         <meta charset="utf-8">
@@ -15,42 +15,52 @@
         <link rel="stylesheet" href="">
         <link rel="preconnect" href="https://fonts.gstatic.com"> 
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+        <style xmlns="http://www.w3.org/1999/xhtml" type="text/css" media="screen">
+            body { background:#eee; margin:0 }
+            svg {
+              display:block; border:1px solid #ccc; position:relative;
+              top:0%; left:0%; width:calc(100% - 2px); height:70%; background:#fff;
+            }
+          </style>
     </head>
     <body>
-        <div id="rumba">
-            <svg width="700" height="350">
+        <!-- <div> -->
+            <svg id="rumba" width="100%" height="90%" viewBox="0 0 710 340" preserveAspectRatio=xMidYMid meet>
                 <!-- four black pillars -->
-                <rect x="100" y="0" rx="20" ry="20" width="50" height="340"
+                <rect class="frame" x="100" y="0" rx="20" ry="20" width="50" height="340"
                 style="fill:black;stroke:black;stroke-width:5;opacity:1" />
-                <rect x="260" y="0" rx="20" ry="20" width="50" height="340"
+                <rect class="frame" x="260" y="0" rx="20" ry="20" width="50" height="340"
                 style="fill:black;stroke:black;stroke-width:5;opacity:1" />
-                <rect x="420" y="0" rx="20" ry="20" width="50" height="340"
+                <rect class="frame" x="420" y="0" rx="20" ry="20" width="50" height="340"
                 style="fill:black;stroke:black;stroke-width:5;opacity:1" />
-                <rect x="580" y="0" rx="20" ry="20" width="50" height="340"
+                <rect class="frame" x="580" y="0" rx="20" ry="20" width="50" height="340"
                 style="fill:black;stroke:black;stroke-width:5;opacity:1" />
                 <!-- bottom black bar -->
-                <rect x="30" y="325" rx="0" ry="0" width="650" height="20"
+                <rect class="frame" x="30" y="325" rx="0" ry="0" width="650" height="20"
                 style="fill:black;stroke:black;stroke-width:5;opacity:1" />
 
                 Sorry, your browser does not support inline SVG.
             </svg>
-        </div>
+        <!-- </div> -->
 
         <h1>Number Rumba</h1>
         <div id="status">
             <p><em>Connecting...</em></p>
         </div>
         <button type="button" id="send">Husselen!</button>
+
         <script type="text/javascript">
         const chat = document.getElementById('status');
         const rumba = document.getElementById('rumba');
+        const rumba_blocks = document.getElementsByClassName('block');
         const uri = 'ws://' + location.host + '/chat';
         const ws = new WebSocket(uri);
 
         function message(data) {
-            // const new_rumba = document.createElement('div');
-            rumba.innerHTML = data;
-            // base_rumba.replaceWith(new_rumba);
+            for (var i = 0; i < rumba_blocks.length; i++) {
+                rumba_blocks[i].remove();
+            }
+            rumba.innerHTML += data;
         }
 
         ws.onopen = function() {
