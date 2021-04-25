@@ -3,16 +3,16 @@ use rand::thread_rng;
 
 pub fn create_random_rumba() -> String {
     // coordinates for blocks on the first row
-    static x_rows: [i32; 3] = [50, 210, 370];
-    static y_cols: [i32; 3] = [20, 120, 220];
+    static X_ROWS: [i32; 3] = [50, 210, 370];
+    static Y_COLS: [i32; 3] = [20, 120, 220];
 
     // coordinates for numbers on 1st, 2nd or 3rd column
-    static one_x_coord: [i32; 3] = [105, 265, 425];
-    static two_x_coord: [i32; 3] = [94, 254, 414];
-    static three_x_coord: [i32; 3] = [92, 255, 412];
-    static num_y_coord: [i32; 3] = [110, 210, 310];
+    static ONE_X_COORD: [i32; 3] = [105, 265, 425];
+    static TWO_X_COORD: [i32; 3] = [94, 254, 414];
+    static THREE_X_COORD: [i32; 3] = [92, 255, 412];
+    static NUM_Y_COORD: [i32; 3] = [110, 210, 310];
 
-    static colors: [&str; 9] = [
+    static COLORS: [&str; 9] = [
         "#ff0062",
         "#ff0062",
         "#ff0062",
@@ -40,17 +40,17 @@ pub fn create_random_rumba() -> String {
             let num = if order[count] % 3 != 0 { order[count] % 3 } else { 3 };
             let x_coord: i32;
             match num {
-                1 => {x_coord = one_x_coord[x]}
-                2 => {x_coord = two_x_coord[x]}
-                3 => {x_coord = three_x_coord[x]}
+                1 => {x_coord = ONE_X_COORD[x]}
+                2 => {x_coord = TWO_X_COORD[x]}
+                3 => {x_coord = THREE_X_COORD[x]}
                 _ => {x_coord = 0; eprintln!("Error converting x_coord.")}
             }
 
             let add_html = format!("<rect x=\"{}\" y=\"{}\" rx=\"10\" ry=\"10\" width=\"150\" height=\"100\"
             style=\"fill:{};stroke:black;stroke-width:5;opacity:1\" />
             <text fill=\"black\" font-size=\"110\" font-family=\"Poppins\" x=\"{}\" y=\"{}\">{}</text>",
-             x_rows[x], y_cols[y], colors[order[count]-1],
-            x_coord, num_y_coord[y], num);
+             X_ROWS[x], Y_COLS[y], COLORS[order[count]-1],
+            x_coord, NUM_Y_COORD[y], num);
 
             rumba_html.push_str(&add_html.clone());
             count += 1;

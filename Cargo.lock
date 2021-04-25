@@ -532,6 +532,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "number-rumba-roulette"
+version = "0.1.0"
+dependencies = [
+ "futures",
+ "pretty_env_logger",
+ "rand 0.8.3",
+ "tokio",
+ "tokio-stream",
+ "warp",
+]
+
+[[package]]
 name = "once_cell"
 version = "1.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1160,18 +1172,6 @@ dependencies = [
  "tokio-util",
  "tower-service",
  "tracing",
-]
-
-[[package]]
-name = "warp-rs"
-version = "0.1.0"
-dependencies = [
- "futures",
- "pretty_env_logger",
- "rand 0.8.3",
- "tokio",
- "tokio-stream",
- "warp",
 ]
 
 [[package]]
