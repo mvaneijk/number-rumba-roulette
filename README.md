@@ -8,3 +8,10 @@ A web application that allows multiple players to connect and see the same rando
 RUST_LOG=info cargo run
 ```
 
+### Linux
+Configure Server IP in `main.rs`
+
+```
+sudo setcap CAP_NET_BIND_SERVICE=+eip target/debug/number-rumba-roulette
+```
+
