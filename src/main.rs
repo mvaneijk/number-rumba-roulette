@@ -43,7 +43,7 @@ async fn main() {
         .map(|ws: warp::ws::Ws, users| {
             // This will call our function if the handshake succeeds.
             ws.on_upgrade(move |socket| user_connected(socket, users))
-        });
+        });     
 
     // GET / -> index html
 
@@ -73,6 +73,7 @@ async fn user_connected(ws: WebSocket, users: Users) {
     let rx = UnboundedReceiverStream::new(rx);
     tokio::task::spawn(rx.forward(user_ws_tx).map(|result| {
         // do stuff when a message is received
+
 
         if let Err(e) = result {
             eprintln!("websocket send error: {}", e);
